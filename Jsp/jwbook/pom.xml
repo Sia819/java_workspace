@@ -5,6 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <build>
+     
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -18,5 +19,14 @@
         <version>3.2.3</version>
       </plugin>
     </plugins>
+    
   </build>
+	<dependencies>
+  		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+    		<groupId>javax.servlet</groupId>
+    		<artifactId>jstl</artifactId>
+    		<version>1.2</version>
+		</dependency>
+	</dependencies>
 </project>
