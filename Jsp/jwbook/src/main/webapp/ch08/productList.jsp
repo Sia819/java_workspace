@@ -12,7 +12,11 @@
 <h2>상품 목록</h2>
 <hr>
 <table border="1">
-<tr><th>번호</th><th>상품명</th><th>가격</th></tr>
+<tr>
+	<th>번호</th>
+	<th>상품명</th>
+	<th>가격</th>
+</tr>
 <c:forEach var="p" varStatus="i" items="${products}">
 	<tr>
 		<td>${i.count}</td>
