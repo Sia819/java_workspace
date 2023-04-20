@@ -8,7 +8,8 @@ import java.util.Map;
 public class ProductService {
 	Map<String, Product> products = new HashMap<>();
 	
-	public ProductService() {
+	public ProductService() 
+	{
 		Product p = new Product("101","애플사과폰 12","애플전자",1200000,"2020.12.12");
 		products.put("101", p);
 		p = new Product("102","삼전우주폰 21","삼전전자",1300000,"2021.2.2");
@@ -17,11 +18,13 @@ public class ProductService {
 		products.put("103", p);
 	}
 	
-	public List<Product> findAll() {
+	public List<Product> findAll() 
+	{
 		return new ArrayList<>(products.values());
 	}
 	
-	public Product find(String id) {
+	public Product find(String id) 
+	{
 		return products.get(id);
 	}
 }

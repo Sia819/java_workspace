@@ -4,7 +4,8 @@ package ch10;
  * @author dinfree
  *
  */
-public class News {
+public class News 
+{
 	private int aid;
 	private String title;
 	private String img;

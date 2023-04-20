@@ -1,0 +1,41 @@
+package ch10;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NewsService 
+{
+	Map<Integer, News> news = new HashMap<>();
+	int count = 0;
+	
+	public NewsService()
+	{
+		//News n = new News();
+	}
+	
+	public List<News> getAll()
+	{
+		return new ArrayList<>(news.values());
+	}
+	
+	public News getNews(int aid)
+	{
+		news.get(aid);
+	    
+	    return null; // 일치하는 Member 객체를 찾지 못했을 경우 null 반환
+	}
+	
+	public void addNews(News n)
+	{
+	    n.setAid(count);
+	    count = count + 1;
+		news.put(n.getAid(), n);
+	}
+	
+	public void delNews(int aid)
+	{
+		news.remove(aid);
+	}
+}

@@ -1,0 +1,36 @@
+package ch10;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NewsService 
+{
+	Map<String, News> news = new HashMap<>();
+	
+	public NewsService()
+	{
+		News n = new News();
+	}
+	
+	public List<News> getAll()
+	{
+		return new ArrayList<>(news.values());
+	}
+	
+	public News getNews(int aid)
+	{
+		
+	}
+	
+	public void addNews(News n)
+	{
+		
+	}
+	
+	public void delNews(int aid)
+	{
+		
+	}
+}

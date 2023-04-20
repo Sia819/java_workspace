@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewsDAO {
+public class NewsDAO 
+{
 	final String JDBC_DRIVER = "org.h2.Driver";
 	final String JDBC_URL = "jdbc:h2:tcp://localhost/~/jwbookdb";
 	
@@ -28,13 +29,77 @@ public class NewsDAO {
 		return conn;
 	}
 	
+	public void addNews(News n) throws Exception
+	{
+		Connection conn = open();
+		
+		String sql = "insert into news(title,img,date,content) values(?,?,CURRENT_TIMESTAMP(),?)";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		try 
+		{
+			pstmt.setString(1, n.getTitle());
+			pstmt.setString(2, n.getImg());
+			pstmt.setString(3, n.getContent());
+			pstmt.executeUpdate();
+			
+			System.out.println("Title for Article => " + n.getTitle());
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			pstmt.close();
+			conn.close();
+		}
+	}
+	
+	public News getNews(int aid) throws SQLException 
+	{
+		Connection conn = open();
+		News n = new News();
+		// 수정됨                                                              // String sql = "select aid, title, img, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate, content from news where aid=?";
+		String sql = "SELECT aid, title, img, date, content "
+				   + "FROM news "
+				   + "WHERE aid=?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, aid);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+
+		// 수정됨
+		try
+		{
+			n.setAid(rs.getInt("aid"));
+			n.setTitle(rs.getString("title"));
+			n.setImg(rs.getString("img"));
+			n.setDate(rs.getString("date"));
+			n.setContent(rs.getString("content"));
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			pstmt.close();
+			conn.close();
+			rs.close();
+		}
+		return n;
+	}
+	
 	public List<News> getAll() throws Exception 
 	{
 		Connection conn = open();
 		List<News> newsList = new ArrayList<>();
 		
-		//String sql = "select aid, title, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate from news";
-		String sql = "select aid, title, date from news";   //skk 수정
+		//수정됨																			//String sql = "select aid, title, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate from news";
+		String sql = "SELECT aid, title, date "
+				   + "FROM news";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		try 
@@ -63,78 +128,32 @@ public class NewsDAO {
 		return newsList;	
 	}
 	
-	public News getNews(int aid) throws SQLException 
+	public void delNews(int aid) throws SQLException 
 	{
-		Connection conn = open();
-		
-		News n = new News();
-		//String sql = "select aid, title, img, PARSEDATETIME(date,'yyyy-MM-dd hh:mm:ss') as cdate, content from news where aid=?";
-	
-		String sql = "select aid, title, img, date, content from news where aid=?"; //skk 수정
-		
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setInt(1, aid);
-		ResultSet rs = pstmt.executeQuery();
-		
-		rs.next();
-		
-		try {
-			n.setAid(rs.getInt("aid"));
-			n.setTitle(rs.getString("title"));
-			n.setImg(rs.getString("img"));
-			n.setDate(rs.getString("date"));    //skk 수정
-			n.setContent(rs.getString("content"));
-			//pstmt.executeQuery();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			pstmt.close();
-			conn.close();
-			rs.close();
-		}
-		return n;
-	}
-	
-	public void addNews(News n) throws Exception
-	{
-		Connection conn = open();
-		
-		String sql = "insert into news(title,img,date,content) values(?,?,CURRENT_TIMESTAMP(),?)";
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		
-		try {
-			pstmt.setString(1, n.getTitle());
-			pstmt.setString(2, n.getImg());
-			pstmt.setString(3, n.getContent());
-			pstmt.executeUpdate();
-			
-			System.out.println("Title for Article => "+n.getTitle());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			pstmt.close();
-			conn.close();
-		}
-	}
-	
-	public void delNews(int aid) throws SQLException {
 		Connection conn = open();
 		
 		String sql = "delete from news where aid=?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
-		try {
+		try 
+		{
 			pstmt.setInt(1, aid);
 			// 삭제된 뉴스 기사가 없을 경우
-			if(pstmt.executeUpdate() == 0) {
+			if(pstmt.executeUpdate() == 0) 
+			{
 				throw new SQLException("DB에러");
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
-		}finally {
+		}
+		finally 
+		{
 			pstmt.close();
 			conn.close();
 		}
 	}
+	
+	
 }

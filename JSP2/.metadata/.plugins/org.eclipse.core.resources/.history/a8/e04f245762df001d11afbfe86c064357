@@ -1,0 +1,40 @@
+package ch10;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NewsService 
+{
+	Map<String, News> news = new HashMap<>();
+	
+	public NewsService()
+	{
+		News n = new News();
+	}
+	
+	public List<News> getAll()
+	{
+		return new ArrayList<>(news.values());
+	}
+	
+	public News getNews(int aid)
+	{
+	    for (News n : news.values())
+	        if (n.getAid() == aid) 
+	        	return n; 			// 일치하는 Member 객체를 찾았으면 반환합니다.
+	    
+	    return null; // 일치하는 Member 객체를 찾지 못했을 경우 null 반환
+	}
+	
+	public void addNews(News n)
+	{
+		
+	}
+	
+	public void delNews(int aid)
+	{
+		
+	}
+}
