@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.StringTokenizer;
+//import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -24,8 +24,7 @@ import ch10.NewsDAO;
 
 @WebServlet("/news.nhn")
 @MultipartConfig(maxFileSize=1024*1024*2, location="c:/Temp/img")
-public class NewsController extends HttpServlet 
-{
+public class NewsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	private NewsDAO dao;
@@ -34,15 +33,13 @@ public class NewsController extends HttpServlet
 	// 웹 리소스 기본 경로 지정
 	private final String START_PAGE = "ch10/newsList.jsp";
 	
-	public void init(ServletConfig config) throws ServletException 
-	{
+	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		dao = new NewsDAO();
 		ctx = getServletContext();		
 	}
 
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("action");
 		
@@ -77,12 +74,23 @@ public class NewsController extends HttpServlet
 		if(view.startsWith("redirect:/")) {
 			// redirect/ 문자열 이후 경로만 가지고 옴
 			String rview = view.substring("redirect:/".length());
-			response.sendRedirect(rview);
+			response.sendRedirect(rview);	// news.nhn?action=listNews  p.334
 		} else {
 			// 지정된 뷰로 포워딩, 포워딩시 컨텍스트경로는 필요없음.
 			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 			dispatcher.forward(request, response);	
 		}
+		// 오류 코드.. forward하면... client가 post 상태로 머물러 있게 된다.
+//		if(view.startsWith("redirect:/")) {
+//			// redirect/ 문자열 이후 경로만 가지고 옴
+//			String rview = view.substring("redirect:/".length());	
+//			RequestDispatcher dispatcher = request.getRequestDispatcher(rview);
+//			dispatcher.forward(request, response);	
+//		} else {
+//			// 지정된 뷰로 포워딩, 포워딩시 컨텍스트경로는 필요없음.
+//			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+//			dispatcher.forward(request, response);	
+}
 	}
     
     public String addNews(HttpServletRequest request) {
@@ -93,10 +101,12 @@ public class NewsController extends HttpServlet
 	        String fileName = getFilename(part);
 	        if(fileName != null && !fileName.isEmpty()){
 	            part.write(fileName);
-	        }	        
+	        }	     
+	        //request.setCharacterEncoding("UTF-8");
 	        // 입력값을 News 객체로 매핑
+	        System.out.println("Before: NewController:Title for Article => "+request.getParameter("title"));
 			BeanUtils.populate(n, request.getParameterMap());
-			
+			System.out.println("After: NewController:Title for Article => "+n.getTitle());
 	        // 이미지 파일 이름을 News 객체에도 저장
 	        n.setImg("/img/"+fileName);
 
@@ -109,7 +119,6 @@ public class NewsController extends HttpServlet
 		}
 		
 		return "redirect:/news.nhn?action=listNews";
-		
 	}
 
 	public String deleteNews(HttpServletRequest request) {
@@ -135,7 +144,7 @@ public class NewsController extends HttpServlet
 			ctx.log("뉴스 목록 생성 과정에서 문제 발생!!");
 			request.setAttribute("error", "뉴스 목록이 정상적으로 처리되지 않았습니다!!");
 		}
-    	return "ch10/newsList.jsp";
+    	return "ch10/newsList.jsp"; //목록뷰
     }
     
     public String getNews(HttpServletRequest request) {
